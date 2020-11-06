@@ -46,30 +46,59 @@ $example_persons_array = [
 	],
 ];
 
-//1.Разбиение ФИО
-getPartsFromFullname
+$n = 0;
+$fullname = $example_persons_array[$n]['fullname'];
+$surname = $example_persons_array[$n]['fullname'];
+$name = $example_persons_array[$n]['fullname'];
 
+
+
+//1.Разбиение ФИО
+function getPartsFromFullname($fullname)
+{
+	$part1 = ['surname', 'name', 'patronomyc'];
+	$part2 = explode(' ', $fullname);
+	return array_combine($part1, $part2);
+};
+
+print_r(getPartsFromFullname($fullname));
+
+/*
+	if ($n == 0) return 0; 
+	if (($n == 1) || ($n == 2)) { 
+	 return 1; 
+	} else { 
+	 return fibo($n - 1) + fibo($n -2); 
+	};
+  };
 
 
 //2.Объединение ФИО
-getPartsFromFullname
+/*function getFullnameFromParts($surname, $name, $patronymic) { 
+	if ($n == 0) return 0; 
+	if (($n == 1) || ($n == 2)) { 
+	 return 1; 
+	} else { 
+	 return fibo($n - 1) + fibo($n -2); 
+	};
+  };*/
 
 
 
 //3.Сокращение ФИО
-getShortName
+//getShortName
 
 
 
 //4.Определение пола по ФИО
-getGenderFromName
+//getGenderFromName
 
 
 
 //5.Определение возрастно-полового состава
-getGenderDescription 
+//getGenderDescription 
 
 
 
 //6.Идеальный подбор пары
-getPerfectPartner 
+//getPerfectPartner 
