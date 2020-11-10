@@ -46,25 +46,27 @@ $example_persons_array = [
 	],
 ];
 
-$n = 8;
+///* Для тестирования
+$n = 9;
 $fullname = $example_persons_array[$n]['fullname'];
-
 $partsFromFullname = getPartsFromFullname($fullname);
-$surname = $partsFromFullname['surname'];
 $name = $partsFromFullname['name'];
-$patronymic = $partsFromFullname['patronomyc'];
-
-//echo ($fullname);
-//echo ('</br>');
+$surname = $partsFromFullname['surname'];
+$patronymic = $partsFromFullname['patronymic'];
+echo ($fullname);
+echo ('</br>');
+//*/
 
 //1.Разбиение ФИО
 function getPartsFromFullname($fullname)
 {
-	return array_combine(['surname', 'name', 'patronomyc'], explode(' ', $fullname));
+	return array_combine(['surname', 'name', 'patronymic'], explode(' ', $fullname));
 };
 
-//print_r(getPartsFromFullname($fullname));
-//echo ('</br>');
+///* Для тестирования
+print_r(getPartsFromFullname($fullname));
+echo ('</br>');
+//*/
 
 //2.Объединение ФИО
 function getFullnameFromParts($surname, $name, $patronymic)
@@ -72,8 +74,10 @@ function getFullnameFromParts($surname, $name, $patronymic)
 	return "$surname $name $patronymic";
 };
 
-//echo getFullnameFromParts($surname, $name, $patronymic);
-//echo ('</br>');
+///* Для тестирования
+echo getFullnameFromParts($surname, $name, $patronymic);
+echo ('</br>');
+//*/
 
 //3.Сокращение ФИО
 function getShortName($fullname)
@@ -85,8 +89,10 @@ function getShortName($fullname)
 	return "$name $shortSurname";
 };
 
-//echo getShortName($fullname);
-//echo ('</br>');
+///* Для тестирования
+echo getShortName($fullname);
+echo ('</br>');
+//*/
 
 //4.Определение пола по ФИО
 function getGenderFromName($fullname)
@@ -94,7 +100,7 @@ function getGenderFromName($fullname)
 	$partsFromFullname = getPartsFromFullname($fullname);
 	$name = $partsFromFullname['name'];
 	$surname = $partsFromFullname['surname'];
-	$patronymic = $partsFromFullname['patronomyc'];
+	$patronymic = $partsFromFullname['patronymic'];
 	$genderMail = 0;
 	$genderFemail = 0;
 
@@ -108,7 +114,11 @@ function getGenderFromName($fullname)
 	return ($genderMail <=> $genderFemail);
 };
 
-//echo getGenderFromName($fullname);
+///* Для тестирования
+getGenderFromName($fullname);
+echo getGenderFromName($fullname);
+echo "</br></br>";
+//*/
 
 //5.Определение возрастно-полового состава
 function getGenderDescription($example_persons_array)
@@ -135,9 +145,9 @@ function getGenderDescription($example_persons_array)
 	$personMailCount = count($genderMailperson);
 	$personFemailCount = count($genderFemailperson);
 	$genderUnknownperson = count($genderUnknownperson);
-	$mailPercent = round(($personMailCount / $personCount) * 100);
-	$femailPercent = round(($personFemailCount / $personCount) * 100);
-	$unknownPercent = round(($genderUnknownperson / $personCount) * 100);
+	$mailPercent = round((($personMailCount / $personCount) * 100), 1);
+	$femailPercent = round((($personFemailCount / $personCount) * 100), 1);
+	$unknownPercent = round((($genderUnknownperson / $personCount) * 100), 1);
 
 	return <<<HEREDOCTEXT
 	Гендерный состав аудитории:</br>
@@ -148,8 +158,44 @@ function getGenderDescription($example_persons_array)
 	HEREDOCTEXT;
 };
 
+///* Для тестирования
 print_r(getGenderDescription($example_persons_array));
-
+//*/
 
 //6.Идеальный подбор пары
-//getPerfectPartner 
+
+///* Для тестирования
+$name = 'иВаН';
+$surname = 'иВаНов';
+$patronymic = 'иВаНоВиЧ';
+//*/
+
+function getPerfectPartner($surname, $name, $patronymic, $example_persons_array)
+{
+	$nameOk = mb_convert_case($name, MB_CASE_TITLE_SIMPLE);
+	$surnameOk = mb_convert_case($surname, MB_CASE_TITLE_SIMPLE);
+	$patronymicOk = mb_convert_case($patronymic, MB_CASE_TITLE_SIMPLE);
+	$fullnameFromParts = getFullnameFromParts($surnameOk, $nameOk, $patronymicOk);
+	$genderFromParts = getGenderFromName($fullnameFromParts);
+	$maxPersonCount = count($example_persons_array);
+
+	do {
+		$randPersonNumber = rand(0, $maxPersonCount - 1);
+		$randPersonFullname = $example_persons_array[$randPersonNumber]['fullname'];
+		$genderRandPerson = getGenderFromName($randPersonFullname);
+  } while (($genderRandPerson == $genderFromParts) || ($genderRandPerson == 0));
+	
+	$shortNameFromParts = getShortName($fullnameFromParts);
+	$shortNameFromArray = getShortName($randPersonFullname);
+	$idealPercent = rand(5000, 10000) / 100;
+
+	return <<<HEREDOCTEXT
+	$shortNameFromParts + $shortNameFromArray = </br>
+	♡ Идеально на $idealPercent% ♡
+	HEREDOCTEXT;
+};
+
+///* Для тестирования
+echo "</br></br>";
+echo getPerfectPartner($surname, $name, $patronymic, $example_persons_array);
+//*/
